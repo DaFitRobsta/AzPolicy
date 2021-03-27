@@ -1,0 +1,65 @@
+{
+  "parameters": {
+    "effect": {
+      "type": "String",
+      "metadata": {
+        "displayName": "Effect",
+        "description": "Enable or disable the execution of the policy"
+      },
+      "allowedValues": [
+        "Modify",
+        "Disabled"
+      ],
+      "defaultValue": "Modify"
+    },
+    "tagName": {
+      "type": "String",
+      "metadata": {
+        "displayName": "Tag Name",
+        "description": "Name of the tag, such as 'environment'"
+      },
+      "defaultValue": "SecurityBaselineRedisCacheThreshold"
+    },
+    "tagValue": {
+      "type": "String",
+      "metadata": {
+        "displayName": "Tag Value",
+        "description": "Value of the tag, such as 'Prod'"
+      },
+      "defaultValue": "Pre-Exist [12/19/2020]"
+    }
+  },
+  "policyRule": {
+    "if": {
+      "allOf": [
+        {
+          "field": "type",
+          "equals": "Microsoft.Cache/redis"
+        },
+        {
+          "field": "Microsoft.Cache/Redis/subnetId",
+          "exists": "false"
+        },
+        {
+          "field": "[concat('tags[', parameters('tagName'), ']')]",
+          "exists": "false"
+        }
+      ]
+    },
+    "then": {
+      "effect": "[parameters('effect')]",
+      "details": {
+        "roleDefinitionIds": [
+          "/providers/microsoft.authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+        ],
+        "operations": [
+          {
+            "operation": "add",
+            "field": "[concat('tags[', parameters('tagName'), ']')]",
+            "value": "[parameters('tagValue')]"
+          }  
+        ]
+      }
+    }
+  }
+}

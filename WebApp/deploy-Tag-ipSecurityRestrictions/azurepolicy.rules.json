@@ -1,0 +1,139 @@
+{
+  "parameters": {
+    "effect": {
+      "type": "String",
+      "metadata": {
+        "displayName": "Effect",
+        "description": "Enable or disable the execution of the policy"
+      },
+      "allowedValues": [
+        "DeployIfNotExists",
+        "Disabled"
+      ],
+      "defaultValue": "DeployIfNotExists"
+    },
+    "tagName": {
+      "type": "String",
+      "metadata": {
+        "displayName": "Tag Name",
+        "description": "Name of the tag, such as 'environment'"
+      },
+      "defaultValue": "SecurityBaselineWebAppThreshold"
+    },
+    "tagValue": {
+      "type": "String",
+      "metadata": {
+        "displayName": "Tag Value",
+        "description": "Value of the tag, such as 'Prod'"
+      },
+      "defaultValue": "Pre-Exist [12/9/2020]"
+    }
+  },
+  "policyRule": {
+    "if": {
+      "allOf": [
+        {
+          "field": "type",
+          "equals": "Microsoft.Web/sites"
+        },
+        {
+          "field": "kind",
+          "like": "app*"
+        },
+        {
+          "field": "[concat('tags[', parameters('tagName'), ']')]",
+          "exists": "false"
+        }
+      ]
+    },
+    "then": {
+      "effect": "[parameters('effect')]",
+      "details": {
+        "roleDefinitionIds": [
+          "/providers/microsoft.authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+        ],
+        "type": "Microsoft.Web/sites/config",
+        "existenceCondition": {
+          "count": {
+            "field": "Microsoft.Web/sites/config/web.ipSecurityRestrictions[*]",
+            "where": {
+              "allOf": [
+                {
+                  "field": "Microsoft.Web/sites/config/web.ipSecurityRestrictions[*].ipAddress",
+                  "equals": "Any"
+                },
+                {
+                  "field": "Microsoft.Web/sites/config/web.ipSecurityRestrictions[*].action",
+                  "equals": "Deny"
+                }
+              ]
+            }
+          },
+          "equals": 1
+        },
+        "deployment": {
+          "properties": {
+              "mode": "incremental",
+              "template": {
+                "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                "contentVersion": "1.0.0.0",
+                "parameters": {
+                  "ResourceName": {
+                      "type": "string"
+                  },
+                  "location":{
+                    "type": "string"
+                  },
+                  "tagName":{
+                    "type":"string"
+                  },
+                  "tagValue":{
+                    "type":"string"
+                  }
+                },
+                "variables": {
+                  "tags": {
+                    "[parameters('tagName')]": "[parameters('tagValue')]"
+                  }
+                },
+                "resources": [
+                  {
+                      "type": "Microsoft.Web/sites",
+                      "apiVersion": "2020-06-01",
+                      "name": "[parameters('ResourceName')]",
+                      "location": "[parameters('location')]",
+                      "tags": "[variables('tags')]",
+                      "properties": {}
+                  }
+              ],
+              "outputs": {
+                "tags":{
+                  "value": "[variables('tags')]",
+                  "type":"object"
+                },
+                "tagName":{
+                  "type":"string",
+                  "value":"[parameters('tagName')]"
+                }
+              }
+            },
+            "parameters": {
+              "ResourceName": {
+                "value": "[field('name')]"
+              },
+              "tagName":{
+                "value": "[parameters('tagName')]"
+              },
+              "tagValue":{
+                "value": "[parameters('tagValue')]"
+              },
+              "location": {
+                "value": "[field('location')]"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

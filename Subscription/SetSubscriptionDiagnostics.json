@@ -1,0 +1,318 @@
+{
+    "properties":{
+        "displayName": "Deploy Subscription Diagnostic Settings",
+        "policyType": "Custom",
+        "mode": "All",
+        "description": "This policy sets the diagnostics settings profile for Subscriptions",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Monitoring"
+        },
+    "parameters": {
+        "effect": {
+            "type": "String",
+            "metadata": {
+                "displayName": "Effect",
+                "description": "Enable or disable the execution of the policy"
+            },
+            "allowedValues": [
+                "DeployIfNotExists",
+                "Disabled"
+            ],
+            "defaultValue": "DeployIfNotExists"
+        },
+        "profileName": {
+            "type": "String",
+            "metadata": {
+                "displayName": "Profile name",
+                "description": "The diagnostic settings profile name"
+            },
+            "defaultValue": "MultiCloudDiagnostics"
+        },
+        "McStorageAccountResourceID": {
+            "type": "String",
+            "metadata": {
+                "displayName": "Storage Account Resource ID",
+                "description": "The Resource ID for the Storage Account used for storing the Diagnostic Logs "
+            },
+            "defaultValue": "/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/<resource group name>/providers/Microsoft.Storage/storageAccounts/<storage acccount name>"
+        },
+        "Diag-Administrative": {
+            "type": "String",
+            "metadata": {
+                "displayName": "Enable Administrative Logs",
+                "description": "Whether to enable Administrative Activity Logs - True or False"
+            },
+            "allowedValues": [
+                "True",
+                "False"
+            ],
+            "defaultValue": "True"
+        },
+        "Diag-Security": {
+            "type": "String",
+            "metadata": {
+                "displayName": "Enable Security Logs",
+                "description": "Whether to enable Security Activity Logs - True or False"
+            },
+            "allowedValues": [
+                "True",
+                "False"
+            ],
+            "defaultValue": "True"
+        },
+        "Diag-ServiceHealth": {
+            "type": "String",
+            "metadata": {
+                "displayName": "Enable Service Health Logs",
+                "description": "Whether to enable Service Health Activity Logs - True or False"
+            },
+            "allowedValues": [
+                "True",
+                "False"
+            ],
+            "defaultValue": "True"
+        },
+        "Diag-Alert": {
+            "type": "String",
+            "metadata": {
+                "displayName": "Enable Alert Logs",
+                "description": "Whether to enable Alert Activity Logs - True or False"
+            },
+            "allowedValues": [
+                "True",
+                "False"
+            ],
+            "defaultValue": "True"
+        },
+        "Diag-Recommendation": {
+            "type": "String",
+            "metadata": {
+                "displayName": "Enable Recommendation Logs",
+                "description": "Whether to enable Recommendation Activity Logs - True or False"
+            },
+            "allowedValues": [
+                "True",
+                "False"
+            ],
+            "defaultValue": "True"
+        },
+        "Diag-Policy": {
+            "type": "String",
+            "metadata": {
+                "displayName": "Enable Policy Logs",
+                "description": "Whether to enable Policy Activity Logs - True or False"
+            },
+            "allowedValues": [
+                "True",
+                "False"
+            ],
+            "defaultValue": "True"
+        },
+        "Diag-Autoscale": {
+            "type": "String",
+            "metadata": {
+                "displayName": "Enable Autoscale Logs",
+                "description": "Whether to enable Autoscale Activity Logs - True or False"
+            },
+            "allowedValues": [
+                "True",
+                "False"
+            ],
+            "defaultValue": "True"
+        },
+        "Diag-ResourceHealth": {
+            "type": "String",
+            "metadata": {
+                "displayName": "Enable Resource Health Logs",
+                "description": "Whether to enable Resource Health Activity Logs - True or False"
+            },
+            "allowedValues": [
+                "True",
+                "False"
+            ],
+            "defaultValue": "True"
+        }
+        },
+    "variables": {},
+    "policyRule": {
+        "if": {
+            "allOf": [
+                {
+                    "field": "type",
+                    "equals": "Microsoft.Resources/subscriptions"
+                }
+            ]
+        },
+      "then": {
+        "effect": "[parameters('effect')]",
+        "details": {
+          "type": "Microsoft.Insights/diagnosticSettings",
+          "name": "[parameters('profileName')]",
+          "deploymentScope": "Subscription",
+          "existenceScope": "Subscription",
+          "existenceCondition": {
+            "field": "Microsoft.Insights/diagnosticSettings/logs.enabled",
+            "equals": "true"
+          },
+          "roleDefinitionIds": [
+            "/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+          ],
+          "deployment": {
+            "location": "eastus",
+            "properties": {
+              "mode": "incremental",
+              "template": {
+                "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+                "contentVersion": "1.0.0.0",
+                "parameters": {
+                  "profileName": {
+                    "type": "string"
+                  },
+                  "Diag-Administrative": {
+                      "type": "string"
+                  },
+                  "Diag-Security": {
+                    "type": "string"
+                  },
+                  "Diag-Alert": {
+                    "type": "string"
+                  },
+                  "Diag-Recommendation": {
+                    "type": "string"
+                  },
+                  "Diag-Policy": {
+                    "type": "string"
+                  },
+                  "Diag-Autoscale": {
+                    "type": "string"
+                  },
+                  "Diag-ResourceHealth": {
+                    "type": "string"
+                  },
+                  "Diag-ServiceHealth": {
+                    "type": "string"
+                  },
+                  "McStorageAccountResourceID": {
+                    "type": "string"
+                  }
+                },
+                "variables": {},
+                "resources": [
+                  {
+                    "type": "Microsoft.Insights/diagnosticSettings",
+                    "apiVersion": "2017-05-01-preview",
+                    "name": "[parameters('profileName')]",
+                    "location": "global",
+                    "properties": {
+                      "storageAccountId": "[parameters('McStorageAccountResourceID')]",
+                      "logs": [
+                        {
+                          "category": "Security",
+                          "enabled": true,
+                          "retentionPolicy": {
+                            "enabled": "[parameters('Diag-Security')]",
+                            "days": "0"
+                          }
+                        },
+                        {
+                          "category": "Administrative",
+                          "enabled": true,
+                          "retentionPolicy": {
+                            "enabled": "[parameters('Diag-Administrative')]",
+                            "days": "0"
+                          }
+                        },
+                        {
+                          "category": "Recommendation",
+                          "enabled": true,
+                          "retentionPolicy": {
+                            "enabled": "[parameters('Diag-Recommendation')]",
+                            "days": "0"
+                          }
+                        },
+                        {
+                            "category": "ServiceHealth",
+                            "enabled": true,
+                            "retentionPolicy": {
+                              "enabled": "[parameters('Diag-ServiceHealth')]",
+                              "days": "0"
+                            }
+                          },
+                          {
+                            "category": "Alert",
+                            "enabled": true,
+                            "retentionPolicy": {
+                              "enabled": "[parameters('Diag-Alert')]",
+                              "days": "0"
+                            }
+                          },
+                          {
+                            "category": "Policy",
+                            "enabled": true,
+                            "retentionPolicy": {
+                              "enabled": "[parameters('Diag-Policy')]",
+                              "days": "0"
+                            }
+                          },
+                          {
+                            "category": "Autoscale",
+                            "enabled": true,
+                            "retentionPolicy": {
+                              "enabled": "[parameters('Diag-Autoscale')]",
+                              "days": "0"
+                            }
+                          },
+                          {
+                            "category": "ResourceHealth",
+                            "enabled": true,
+                            "retentionPolicy": {
+                              "enabled": "[parameters('Diag-ResourceHealth')]",
+                              "days": "0"
+                            }
+                          }       
+                      ]
+                    }
+                  }
+                ],
+                "outputs": {}
+              },
+              "parameters": {
+                "profileName": {
+                  "value": "[parameters('profileName')]"
+                },
+                "Diag-Administrative": {
+                    "value": "[parameters('Diag-Administrative')]"
+                },
+                "Diag-Security": {
+                    "value": "[parameters('Diag-Security')]"
+                },
+                "Diag-ServiceHealth": {
+                    "value": "[parameters('Diag-ServiceHealth')]"
+                },
+                "Diag-Alert": {
+                    "value": "[parameters('Diag-Alert')]"
+                },
+                "Diag-Recommendation": {
+                    "value": "[parameters('Diag-Recommendation')]"
+                },
+                "Diag-Policy": {
+                    "value": "[parameters('Diag-Policy')]"
+                },
+                "Diag-Autoscale": {
+                    "value": "[parameters('Diag-Autoscale')]"
+                },
+                "Diag-ResourceHealth": {
+                    "value": "[parameters('Diag-ResourceHealth')]"
+                },
+                "McStorageAccountResourceID": {
+                    "value": "[parameters('McStorageAccountResourceID')]"
+                }               
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

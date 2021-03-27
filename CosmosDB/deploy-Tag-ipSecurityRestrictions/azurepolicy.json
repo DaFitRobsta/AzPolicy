@@ -1,0 +1,125 @@
+{
+  "properties": {
+    "displayName": "Add a Tag, Azure Cosmos DB accounts should have firewall rules",
+    "name": "deploy-tag-cosmosdb-internet-traffic-allowed",
+    "mode": "All",
+    "description": "Add a tag, Azure Cosmos DB accounts should have firewall rules",
+    "metadata": {
+      "category": "Cosmos DB",
+      "version": "1.0.0"
+    },
+    "parameters": {
+      "effect": {
+        "type": "String",
+        "metadata": {
+          "displayName": "Effect",
+          "description": "Enable or disable the execution of the policy"
+        },
+        "allowedValues": [
+          "Modify",
+          "Disabled"
+        ],
+        "defaultValue": "Modify"
+      },
+      "tagName": {
+        "type": "String",
+        "metadata": {
+          "displayName": "Tag Name",
+          "description": "Name of the tag, such as 'environment'"
+        },
+        "defaultValue": "SecurityBaselineCosmosDBThreshold"
+      },
+      "tagValue": {
+        "type": "String",
+        "metadata": {
+          "displayName": "Tag Value",
+          "description": "Value of the tag, such as 'Prod'"
+        },
+        "defaultValue": "Pre-Exist [12/18/2020]"
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.DocumentDB/databaseAccounts"
+          },
+          {
+            "field": "[concat('tags[', parameters('tagName'), ']')]",
+            "exists": "false"
+          },
+          {
+            "anyOf": [
+              {
+                "field": "Microsoft.DocumentDB/databaseAccounts/publicNetworkAccess",
+                "exists": "false"
+              },
+              {
+                "field": "Microsoft.DocumentDB/databaseAccounts/publicNetworkAccess",
+                "equals": "Enabled"
+              }
+            ]
+          },
+          {
+            "anyOf": [
+              {
+                "field": "Microsoft.DocumentDB/databaseAccounts/isVirtualNetworkFilterEnabled",
+                "exists": "false"
+              },
+              {
+                "field": "Microsoft.DocumentDB/databaseAccounts/isVirtualNetworkFilterEnabled",
+                "equals": "false"
+              },
+              {
+                "allOf": [
+                  {
+                    "anyOf": [
+                      {
+                        "field": "Microsoft.DocumentDB/databaseAccounts/ipRules",
+                        "exists": "false"
+                      },
+                      {
+                        "count": {
+                          "field": "Microsoft.DocumentDB/databaseAccounts/ipRules[*]"
+                        },
+                        "equals": 0
+                      }
+                    ]
+                  },
+                  {
+                    "anyOf": [
+                      {
+                        "field": "Microsoft.DocumentDB/databaseAccounts/ipRangeFilter",
+                        "exists": "false"
+                      },
+                      {
+                        "field": "Microsoft.DocumentDB/databaseAccounts/ipRangeFilter",
+                        "equals": ""
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]",
+        "details": {
+          "roleDefinitionIds": [
+            "/providers/microsoft.authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+          ],
+          "operations": [
+            {
+              "operation": "add",
+              "field": "[concat('tags[', parameters('tagName'), ']')]",
+              "value": "[parameters('tagValue')]"
+            }  
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+    "properties": {
+      "displayName": "Audit Internet access to your Web Apps",
+      "mode": "Indexed",
+      "description": "Audit web apps that are exposed to the internet",
+      "metadata": {
+        "category": "App Service",
+        "version": "1.0.0"
+      },
+      "parameters": {
+        "effect": {
+          "type": "String",
+          "metadata": {
+            "displayName": "Effect",
+            "description": "Enable or disable the execution of the policy"
+          },
+          "allowedValues": [
+            "AuditIfNotExists",
+            "Disabled"
+          ],
+          "defaultValue": "AuditIfNotExists"
+        }
+      },
+      "policyRule": {
+        "if": {
+          "allOf": [
+            {
+              "field": "type",
+              "equals": "Microsoft.Web/sites"
+            },
+            {
+              "field": "kind",
+              "like": "app*"
+            }
+          ]
+        },
+        "then": {
+          "effect": "[parameters('effect')]",
+          "details": {
+            "type": "Microsoft.Web/sites/config",
+            "existenceCondition": {
+              "count": {
+                "field": "Microsoft.Web/sites/config/web.ipSecurityRestrictions[*]",
+                "where": {
+                  "allOf": [
+                    {
+                      "field": "Microsoft.Web/sites/config/web.ipSecurityRestrictions[*].ipAddress",
+                      "equals": "Any"
+                    },
+                    {
+                      "field": "Microsoft.Web/sites/config/web.ipSecurityRestrictions[*].action",
+                      "equals": "Deny"
+                    }
+                  ]
+                }
+              },
+              "equals": 1
+            }
+          }
+        }
+      }
+    }
+  }
