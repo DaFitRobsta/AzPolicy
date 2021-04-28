@@ -1,0 +1,208 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-08-01/managementGroupDeploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {},
+  "variables": {
+      "initiatives": {
+          "policySetDefinitions": [
+              {
+                  "properties": {
+                    "displayName": "Deploy Subscription Tags to Resources",
+                    "description": "This initiative definition adds up to 9 tags identified at the subscription level to be inherited to all resources within the subscription.",
+                    "metadata": {
+                      "category": "Tags",
+                      "version": "1.0"
+                    },
+                    "parameters": {
+                      "firstTagName": {
+                        "type": "string",
+                        "defaultValue": "ApplicationName",
+                        "metadata": {
+                          "displayName": "First Tag Name"
+                        }
+                      },
+                      "secondTagName": {
+                        "type": "string",
+                        "defaultValue": "BillingCode",
+                        "metadata": {
+                          "displayName": "Second Tag Name",
+                          "description": "Provide the name of the second tag to be inherited from subscription"
+                        }
+                      },
+                      "thirdTagName": {
+                        "type": "string",
+                        "defaultValue": "DataClassification",
+                        "metadata": {
+                          "displayName": "Third Tag Name",
+                          "description": "Provide the name of the third tag to be inherited from subscription"
+                        }
+                      },
+                      "fourthTagName": {
+                        "type": "string",
+                        "defaultValue": "Division",
+                        "metadata": {
+                          "displayName": "Fourth Tag Name",
+                          "description": "Provide the name of the fourth tag to be inherited from subscription"
+                        }
+                      },
+                      "fifthTagName": {
+                        "type": "string",
+                        "defaultValue": "Environment",
+                        "metadata": {
+                          "displayName": "Fifth Tag Name",
+                          "description": "Provide the name of the fifth tag to be inherited from subscription"
+                        }
+                      },
+                      "sixthTagName": {
+                        "type": "string",
+                        "defaultValue": "FiscalApprover",
+                        "metadata": {
+                          "displayName": "Sixth Tag Name",
+                          "description": "Provide the name of the sixth tag to be inherited from subscription"
+                        }
+                      },
+                      "seventhTagName": {
+                        "type": "string",
+                        "defaultValue": "RegulatoryRequirement",
+                        "metadata": {
+                          "displayName": "Seventh Tag Name",
+                          "description": "Provide the name of the seventh tag to be inherited from subscription"
+                        }
+                      },
+                      "eighthTagName": {
+                        "type": "string",
+                        "defaultValue": "Routing",
+                        "metadata": {
+                          "displayName": "Eighth Tag Name",
+                          "description": "Provide the name of the eighth tag to be inherited from subscription"
+                        }
+                      },
+                      "ninthTagName": {
+                        "type": "string",
+                        "defaultValue": "TechnicalApprover",
+                        "metadata": {
+                          "displayName": "Ninth Tag Name",
+                          "description": "Provide the name of the ninth tag to be inherited from subscription"
+                        }
+                      }
+                    },
+                    "policyDefinitionGroups": null,
+                    "policyDefinitions": [
+                      {
+                        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/b27a0cbd-a167-4dfa-ae64-4337be671140",
+                        "parameters": {
+                          "tagName": {
+                            "value": "[[parameters('firstTagName')]"
+                          }
+                        },
+                        "policyDefinitionReferenceId": "Inherit first tag from the subscription",
+                        "groupNames": []
+                      },
+                      {
+                        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/b27a0cbd-a167-4dfa-ae64-4337be671140",
+                        "parameters": {
+                          "tagName": {
+                            "value": "[[parameters('secondTagName')]"
+                          }
+                        },
+                        "policyDefinitionReferenceId": "Inherit second tag from the subscription",
+                        "groupNames": []
+                      },
+                      {
+                        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/b27a0cbd-a167-4dfa-ae64-4337be671140",
+                        "parameters": {
+                          "tagName": {
+                            "value": "[[parameters('thirdTagName')]"
+                          }
+                        },
+                        "policyDefinitionReferenceId": "Inherit third tag from the subscription",
+                        "groupNames": []
+                      },
+                      {
+                        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/b27a0cbd-a167-4dfa-ae64-4337be671140",
+                        "parameters": {
+                          "tagName": {
+                            "value": "[[parameters('fourthTagName')]"
+                          }
+                        },
+                        "policyDefinitionReferenceId": "Inherit fourth tag from the subscription",
+                        "groupNames": []
+                      },
+                      {
+                        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/b27a0cbd-a167-4dfa-ae64-4337be671140",
+                        "parameters": {
+                          "tagName": {
+                            "value": "[[parameters('fifthTagName')]"
+                          }
+                        },
+                        "policyDefinitionReferenceId": "Inherit fifth tag from the subscription",
+                        "groupNames": []
+                      },
+                      {
+                        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/b27a0cbd-a167-4dfa-ae64-4337be671140",
+                        "parameters": {
+                          "tagName": {
+                            "value": "[[parameters('sixthTagName')]"
+                          }
+                        },
+                        "policyDefinitionReferenceId": "Inherit sixth tag from the subscription",
+                        "groupNames": []
+                      },
+                      {
+                        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/b27a0cbd-a167-4dfa-ae64-4337be671140",
+                        "parameters": {
+                          "tagName": {
+                            "value": "[[parameters('seventhTagName')]"
+                          }
+                        },
+                        "policyDefinitionReferenceId": "Inherit seventh tag from the subscription",
+                        "groupNames": []
+                      },
+                      {
+                        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/b27a0cbd-a167-4dfa-ae64-4337be671140",
+                        "parameters": {
+                          "tagName": {
+                            "value": "[[parameters('eighthTagName')]"
+                          }
+                        },
+                        "policyDefinitionReferenceId": "Inherit eighth tag from the subscription",
+                        "groupNames": []
+                      },
+                      {
+                        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/b27a0cbd-a167-4dfa-ae64-4337be671140",
+                        "parameters": {
+                          "tagName": {
+                            "value": "[[parameters('ninthTagName')]"
+                          }
+                        },
+                        "policyDefinitionReferenceId": "Inherit ninth tag from the subscription",
+                        "groupNames": []
+                      }      
+                    ]
+                  },
+                    "name": "Deploy-Subscription-Tags-to-Resources",
+                    "type": null
+              }
+          ]
+      }
+  },
+  "resources": [
+      {
+          "type": "Microsoft.Authorization/policySetDefinitions",
+          "name": "[variables('initiatives').policySetDefinitions[copyIndex()].name]",
+          "apiVersion": "2019-09-01",
+          "dependsOn": [],
+          "copy": {
+              "name": "policySetDefinitionCopy",
+              "count": "[length(variables('initiatives').policySetDefinitions)]"
+          },
+          "properties": {
+              "displayName": "[variables('initiatives').policySetDefinitions[copyIndex()].properties.displayName]",
+              "description": "[variables('initiatives').policySetDefinitions[copyIndex()].properties.description]",
+              "parameters": "[variables('initiatives').policySetDefinitions[copyIndex()].properties.parameters]",
+              "policyDefinitions": "[variables('initiatives').policySetDefinitions[copyIndex()].properties.policyDefinitions]",
+              "metadata": "[variables('initiatives').policySetDefinitions[copyIndex()].properties.metadata]"
+          }
+      }
+  ]
+}

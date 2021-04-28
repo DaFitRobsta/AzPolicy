@@ -2,13 +2,12 @@
 
 This Initiative definition contains 9 declarations of the policy definition **Inherit a tag from the subscription**, inheriting 9 tags to all resources under the subscription.
 
-## Try with PowerShell
+## Try on Portal
+
+[![Deploy To Azure](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3a%2f%2fraw.githubusercontent.com%2fDaFitRobsta%2fAzPolicy%2fmain%2fTags%2fpolicySetDefinitions%2fSubscriptions%2fInherit%2fdeploySubscriptionTagsToResources.arm.json)
 
 ````powershell
-$definition = New-AzPolicySetDefinition -Name "Deploy-Subscription-Tags-to-Resources" -DisplayName "Deploy Subscription Tags to Resources" -description "This initiative definition adds up to 9 tags identified at the subscription level to be inherited to all resources within the subscription." -PolicyDefinition 'https://raw.githubusercontent.com/DaFitRobsta/AzPolicy/main/Tags/policySetDefinitions/Subscriptions/Inherit/deploySubscriptionTagsToResources.json' -Metadata '{"category":"Tags", "version":"1.0.0"}' -ManagementGroupName "<managementGroupID>"
-$definition
-$assignment = New-AzPolicyAssignment -Name <assignmentname> -Scope <scope> -PolicyDefinition $definition
-$assignment
+New-AzManagementGroupDeployment -Name "Deploy-Subscription-Tags-to-Resources" -ManagementGroupId "myMG" -Location "West US 2" -TemplateUri 'https://raw.githubusercontent.com/DaFitRobsta/AzPolicy/main/Tags/policySetDefinitions/Subscriptions/Inherit/deploySubscriptionTagsToResources.arm.json'
 ````
 
 <!--
