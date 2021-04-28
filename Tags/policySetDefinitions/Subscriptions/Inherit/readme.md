@@ -5,7 +5,7 @@ This Initiative definition contains 9 declarations of the policy definition **In
 ## Try with PowerShell
 
 ````powershell
-$definition = New-AzPolicySetDefinition -Name "Deploy-Subscription-Tags-to-Resources" -DisplayName "Deploy Subscription Tags to Resources" -description "This initiative definition adds up to 9 tags identified at the subscription level to be inherited to all resources within the subscription." -Policy 'https://raw.githubusercontent.com/DaFitRobsta/AzPolicy/main/Tags/policySetDefinitions/Subscriptions/Inherit/deploySubscriptionTagsToResources.json' -Mode Indexed -Metadata '{"category":"Tags", "version":"1.0.0"}' -ManagementGroupName "SL-WT"
+$definition = New-AzPolicySetDefinition -Name "Deploy-Subscription-Tags-to-Resources" -DisplayName "Deploy Subscription Tags to Resources" -description "This initiative definition adds up to 9 tags identified at the subscription level to be inherited to all resources within the subscription." -PolicyDefinition 'https://raw.githubusercontent.com/DaFitRobsta/AzPolicy/main/Tags/policySetDefinitions/Subscriptions/Inherit/deploySubscriptionTagsToResources.json' -Metadata '{"category":"Tags", "version":"1.0.0"}' -ManagementGroupName "<managementGroupID>"
 $definition
 $assignment = New-AzPolicyAssignment -Name <assignmentname> -Scope <scope> -PolicyDefinition $definition
 $assignment
