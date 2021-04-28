@@ -5,7 +5,7 @@ This Initiative definition contains 9 declarations of the policy definition **In
 ## Try on Portal
 
 [![Deploy To Azure](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3a%2f%2fraw.githubusercontent.com%2fDaFitRobsta%2fAzPolicy%2fmain%2fTags%2fpolicySetDefinitions%2fSubscriptions%2fInherit%2fdeploySubscriptionTagsToResources.arm.json)
-[![Deploy To Azure Gov](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazuregov.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3a%2f%2fraw.githubusercontent.com%2fDaFitRobsta%2fAzPolicy%2fmain%2fTags%2fpolicySetDefinitions%2fSubscriptions%2fInherit%2fdeploySubscriptionTagsToResources.arm.json)
+[![Deploy To Azure Gov](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazuregov.svg?sanitize=true)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3a%2f%2fraw.githubusercontent.com%2fDaFitRobsta%2fAzPolicy%2fmain%2fTags%2fpolicySetDefinitions%2fSubscriptions%2fInherit%2fdeploySubscriptionTagsToResources.arm.json)
 [![Visualize](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/visualizebutton.svg?sanitize=true)](http://armviz.io/#/?load=https%3a%2f%2fraw.githubusercontent.com%2fDaFitRobsta%2fAzPolicy%2fmain%2fTags%2fpolicySetDefinitions%2fSubscriptions%2fInherit%2fdeploySubscriptionTagsToResources.arm.json)
 
 ## Try in PowerShell
