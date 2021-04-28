@@ -6,6 +6,10 @@ This Initiative definition contains 9 declarations of the policy definition **In
 
 [![Deploy To Azure](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3a%2f%2fraw.githubusercontent.com%2fDaFitRobsta%2fAzPolicy%2fmain%2fTags%2fpolicySetDefinitions%2fSubscriptions%2fInherit%2fdeploySubscriptionTagsToResources.arm.json)
 
+[![Deploy To Azure Gov](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazuregov.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3a%2f%2fraw.githubusercontent.com%2fDaFitRobsta%2fAzPolicy%2fmain%2fTags%2fpolicySetDefinitions%2fSubscriptions%2fInherit%2fdeploySubscriptionTagsToResources.arm.json)
+
+## Try in PowerShell
+
 ````powershell
 New-AzManagementGroupDeployment -Name "Deploy-Subscription-Tags-to-Resources" -ManagementGroupId "myMG" -Location "West US 2" -TemplateUri 'https://raw.githubusercontent.com/DaFitRobsta/AzPolicy/main/Tags/policySetDefinitions/Subscriptions/Inherit/deploySubscriptionTagsToResources.arm.json'
 ````
