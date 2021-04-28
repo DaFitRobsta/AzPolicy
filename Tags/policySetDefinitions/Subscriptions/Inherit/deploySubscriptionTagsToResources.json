@@ -165,6 +165,5 @@
     }      
   ],
   "policyDefinitionGroups": [],
-  "name": "Deploy-Subscription-Tags-to-Resources",
-  "type": "Microsoft.Authorization/policySetDefinitions"
+  "name": "Deploy-Subscription-Tags-to-Resources"
 }
