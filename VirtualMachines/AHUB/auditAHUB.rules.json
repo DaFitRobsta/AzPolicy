@@ -1,0 +1,33 @@
+{
+  "policyRule": {
+    "if": {
+      "allOf": [
+        {
+          "field": "type",
+          "in": [
+            "Microsoft.Compute/virtualMachines",
+            "Microsoft.Compute/VirtualMachineScaleSets"
+          ]
+        },
+        {
+          "field": "Microsoft.Compute/imagePublisher",
+          "equals": "MicrosoftWindowsServer"
+        },
+        {
+          "field": "Microsoft.Compute/imageOffer",
+          "in": [
+            "WindowsServer",
+            "WindowsServerSemiAnnual"
+          ]
+        },
+        {
+          "field": "Microsoft.Compute/licenseType",
+          "notEquals": "Windows_Server"
+        }            
+      ]
+    },
+    "then": {
+      "effect": "audit"
+    }
+  }
+}

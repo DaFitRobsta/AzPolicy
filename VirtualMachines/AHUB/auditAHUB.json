@@ -1,0 +1,61 @@
+{
+    "properties": {
+      "displayName": "Audit Azure Hybrid Benefit for Windows Servers",
+      "mode": "Indexed",
+      "description": "Audit Azure Hybrid Benefit for Windows Servers",
+      "metadata": {
+        "category": "Compute",
+        "version": "1.0.0"
+      },
+      "parameters": {
+        "effect": {
+          "type": "String",
+          "metadata": {
+            "displayName": "Effect",
+            "description": "Enable or disable the execution of the policy"
+          },
+          "allowedValues": [
+            "Audit",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        }
+      },
+      "policyRule": {
+        "if": {
+            "allOf": [
+              {
+                "field": "type",
+                "in": [
+                  "Microsoft.Compute/virtualMachines",
+                  "Microsoft.Compute/VirtualMachineScaleSets"
+                ]
+              },
+              {
+                  "allOf": [
+                    {
+                        "field": "Microsoft.Compute/imagePublisher",
+                        "equals": "MicrosoftWindowsServer"
+                      },
+                      {
+                        "field": "Microsoft.Compute/imageOffer",
+                        "in": [
+                          "WindowsServer",
+                          "WindowsServerSemiAnnual"
+                        ]
+                      },
+                      {
+                        "field": "Microsoft.Compute/licenseType",
+                        "notEquals": "Windows_Server"
+                      }
+                    ]
+                }
+            ]
+          },
+          "then": {
+            "effect": "audit"
+          }
+        }
+      }
+    }
+  }
