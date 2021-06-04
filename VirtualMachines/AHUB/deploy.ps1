@@ -1,0 +1,1 @@
+New-AzPolicyDefinition -Name "Audit-AHUB" -DisplayName "Audit Azure Hybrid Benefit for Windows Servers" -description "Audit Azure Hybrid Benefit for Windows Servers" -Policy '.\auditAHUB.rules.json'  -Mode Indexed
