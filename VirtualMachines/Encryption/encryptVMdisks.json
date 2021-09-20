@@ -1,0 +1,180 @@
+{
+    "properties": {
+      "displayName": "[Custom] Encrypt all virtual machines temp disks, caches, and data flows between Compute and Storage resources",
+      "policyType": "Custom",
+      "mode": "All",
+      "description": "By default, a virtual machine's OS and data disks are encrypted-at-rest using platform-managed keys. Temp disks, data caches and data flowing between compute and storage aren't encrypted. Disregard this recommendation if: 1. using encryption-at-host, or 2. server-side encryption on Managed Disks meets your security requirements. Learn more in [Server-side encryption of Azure Disk Storage.](https://aka.ms/disksse), [Different disk encryption offerings]( https://aka.ms/diskencryptioncomparison)",
+      "metadata": {
+        "version": "1.0.0",
+        "category": "Security Center"
+      },
+      "parameters": {
+        "effect": {
+          "type": "String",
+          "metadata": {
+            "displayName": "Effect",
+            "description": "Enable or disable the execution of the policy"
+          },
+          "allowedValues": [
+            "DeployIfNotExists",
+            "Disabled"
+          ],
+          "defaultValue": "DeployIfNotExists"
+        },
+        "keyVaultName": {
+            "type": "String",
+            "metadata": {
+                "description": "Name of the KeyVault to place the volume encryption key"
+            }
+        },
+        "keyVaultResourceGroup": {
+            "type": "string",
+            "metadata": {
+              "description": "Resource group of the KeyVault"
+            }
+          },
+        "keyEncryptionKeyURL": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+              "description": "URL of the KeyEncryptionKey used to encrypt the volume encryption key"
+            }
+        },
+        "volumeType": {
+            "type": "string",
+            "defaultValue": "All",
+            "metadata": {
+              "description": "Type of the volume OS or Data to perform encryption operation"
+            }
+        }
+      },
+      "policyRule": {
+        "if": {
+          "field": "type",
+          "in": [
+            "Microsoft.ClassicCompute/virtualMachines",
+            "Microsoft.Compute/virtualMachines"
+          ]
+        },
+        "then": {
+          "effect": "[parameters('effect')]",
+          "details": {
+            "type": "Microsoft.Security/assessments",
+            "name": "d57a4221-a804-52ca-3dea-768284f06bb7",
+            "existenceCondition": {
+              "field": "Microsoft.Security/assessments/status.code",
+              "in": [
+                "NotApplicable",
+                "Healthy"
+              ]
+            },
+            "roleDefinitionIds": [
+                "/providers/Microsoft.Authorization/roleDefinitions/9980e02c-c2be-4d73-94e8-173b1dc7cf3c"
+            ],
+            "deployment": {
+                "properties": {
+                    "mode": "incremental",
+                    "template": {
+                        "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                        "contentVersion": "1.0.0.0",
+                        "parameters":{
+                            "keyVaultName": {
+                                "type": "String",
+                                "metadata": {
+                                    "description": "Name of the KeyVault to place the volume encryption key"
+                                }
+                            },
+                            "keyVaultResourceGroup": {
+                                "type": "string",
+                                "metadata": {
+                                  "description": "Resource group of the KeyVault"
+                                }
+                              },
+                            "keyEncryptionKeyURL": {
+                                "type": "string",
+                                "defaultValue": "",
+                                "metadata": {
+                                  "description": "URL of the KeyEncryptionKey used to encrypt the volume encryption key"
+                                }
+                            },
+                            "vmName": {
+                                "type":"string",
+                                "metadata":{
+                                    "description": "Name of the VM"
+                                }
+                            },
+                            "volumeType": {
+                                "type": "string",
+                                "defaultValue": "All",
+                                "metadata": {
+                                  "description": "Type of the volume OS or Data to perform encryption operation"
+                                }
+                            },
+                            "location": {
+                                "type": "string",
+                                "metadata":{
+                                    "description": "Location of the VM which will be used for the extension"
+                                }
+                            }
+                        },
+                        "variables": {
+                            "extensionName": "AzureDiskEncryption",
+                            "extensionVersion": "2.2",
+                            "encryptionOperation": "EnableEncryption",
+                            "keyEncryptionAlgorithm": "RSA-OAEP",
+                            "keyVaultResourceID": "[resourceId(parameters('keyVaultResourceGroup'), 'Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
+                        },
+                        "resources": [
+                            {
+                                "type": "Microsoft.Compute/virtualMachines/extensions",
+                                "name": "[concat(parameters('vmName'),'/', variables('extensionName'))]",
+                                "location": "[parameters('location')]",
+                                "apiVersion": "2021-04-01",
+                                "properties": {
+                                    "publisher": "Microsoft.Azure.Security",
+                                    "type": "[variables('extensionName')]",
+                                    "typeHandlerVersion": "[variables('extensionVersion')]",
+                                    "autoUpgradeMinorVersion": true,                                    
+                                    "settings": {
+                                    "EncryptionOperation": "[variables('encryptionOperation')]",
+                                    "KeyVaultURL": "[reference(variables('keyVaultResourceId'), '2019-09-01').vaultUri]",
+                                    "KeyVaultResourceId": "[variables('keyVaultResourceID')]",
+                                    "KeyEncryptionKeyURL": "[parameters('keyEncryptionKeyURL')]",
+                                    "KekVaultResourceId": "[variables('keyVaultResourceID')]",
+                                    "KeyEncryptionAlgorithm": "[variables('keyEncryptionAlgorithm')]",
+                                    "VolumeType": "[parameters('volumeType')]"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "parameters":{
+                        "location":{
+                            "value": "[field('location')]"
+                        },
+                        "vmName":{
+                            "value": "[field('name')]"
+                        },
+                        "keyVaultName":{
+                            "value": "[parameter('keyVaultName')]"
+                        },
+                        "keyVaultResourceGroup":{
+                            "value":"[parameter('keyVaultResourceGroup')]"
+                        },
+                        "keyEncryptionKeyURL":{
+                            "value":"[parameter('keyEncryptionKeyURL')]"
+                        },
+                        "volumeType":{
+                            "value":"[parameter('volumeType')]"
+                        }
+                    }
+                }
+            }
+          }
+        }
+      }
+    },
+    "id": "/providers/Microsoft.Authorization/policyDefinitions/encryptVMdisks",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "name": "encryptVMdisks"    
+}
