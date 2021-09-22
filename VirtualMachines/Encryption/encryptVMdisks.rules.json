@@ -128,13 +128,13 @@
                                     "typeHandlerVersion": "[variables('extensionVersion')]",
                                     "autoUpgradeMinorVersion": true,                                    
                                     "settings": {
-                                    "EncryptionOperation": "[variables('encryptionOperation')]",
-                                    "KeyVaultURL": "[reference(variables('keyVaultResourceId'), '2019-09-01').vaultUri]",
-                                    "KeyVaultResourceId": "[variables('keyVaultResourceID')]",
-                                    "KeyEncryptionKeyURL": "[parameters('keyEncryptionKeyURL')]",
-                                    "KekVaultResourceId": "[variables('keyVaultResourceID')]",
-                                    "KeyEncryptionAlgorithm": "[variables('keyEncryptionAlgorithm')]",
-                                    "VolumeType": "[parameters('volumeType')]"
+                                      "EncryptionOperation": "[variables('encryptionOperation')]",
+                                      "KeyVaultURL": "[reference(variables('keyVaultResourceId'), '2019-09-01').vaultUri]",
+                                      "KeyVaultResourceId": "[variables('keyVaultResourceID')]",
+                                      "KeyEncryptionKeyURL": "[parameters('keyEncryptionKeyURL')]",
+                                      "KekVaultResourceId": "[variables('keyVaultResourceID')]",
+                                      "KeyEncryptionAlgorithm": "[variables('keyEncryptionAlgorithm')]",
+                                      "VolumeType": "[parameters('volumeType')]"
                                     }
                                 }
                             }
